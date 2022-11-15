@@ -1,0 +1,59 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Go</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>   
+    <h1 id="title">Tic-Tac-Go!</h1>
+    <h3>{{ .Note }}</h3>
+
+    <div class="container">
+        <table id="board">
+            <tr class="row 1">
+                {{ range .Board  }}
+                    {{ if (le .Box 2) }}
+                        {{ if (eq .Player 1) }}
+                            <td class="box x" id="{{ .Box }}"><a href="/{{ .Box }}"> X </a></td>
+                        {{ else if (eq .Player 2) }}
+                            <td class="box o" id="{{ .Box }}"><a href="/{{ .Box }}"> O </a></td>
+                        {{ else }}
+                            <td class="box" id="{{ .Box }}"><a href="/{{ .Box }}">   </a></td>
+                        {{ end }}
+                    {{ end }}
+                {{ end }}
+                </tr>                  
+                <tr class="row 2">
+                    {{ range .Board  }}
+                        {{ if and (ge .Box 3) (le .Box 5) }}
+                            {{ if (eq .Player 1) }}
+                                <td class="box x" id="{{ .Box }}"><a href="/{{ .Box }}"> X </a></td>
+                            {{ else if (eq .Player 2) }}
+                                <td class="box o" id="{{ .Box }}"><a href="/{{ .Box }}"> O </a></td>
+                            {{ else }}
+                                <td class="box" id="{{ .Box }}"><a href="/{{ .Box }}">   </a></td>
+                            {{ end }}
+                        {{ end }}
+                    {{ end }}
+                </tr>         
+                <tr class="row 3">
+                {{ range .Board  }}
+                    {{ if and (ge .Box 6) (le .Box 8) }}
+                        {{ if (eq .Player 1) }}
+                            <td class="box x" id="{{ .Box }}"><a href="/{{ .Box }}"> X </a></td>
+                        {{ else if (eq .Player 2) }}
+                            <td class="box o" id="{{ .Box }}"><a href="/{{ .Box }}"> O </a></td>
+                        {{ else }}
+                            <td class="box" id="{{ .Box }}"><a href="/{{ .Box }}">   </a></td>
+                        {{ end }}
+                    {{ end }}
+                {{ end }}
+            </tr>
+        </table>
+    </div>
+    
+    <a href="/"><button class="start">Start Over</button></a>
+</body>
+</html>
