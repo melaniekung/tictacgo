@@ -15,9 +15,9 @@
             <tr class="row 1">
                 {{ range .Board  }}
                     {{ if (le .Box 2) }}
-                        {{ if (eq .Player 1) }}
+                        {{ if (eq .Play 1) }}
                             <td class="box x" id="{{ .Box }}"><a href="/{{ .Box }}"> X </a></td>
-                        {{ else if (eq .Player 2) }}
+                        {{ else if (eq .Play 2) }}
                             <td class="box o" id="{{ .Box }}"><a href="/{{ .Box }}"> O </a></td>
                         {{ else }}
                             <td class="box" id="{{ .Box }}"><a href="/{{ .Box }}">   </a></td>
@@ -28,9 +28,9 @@
                 <tr class="row 2">
                     {{ range .Board  }}
                         {{ if and (ge .Box 3) (le .Box 5) }}
-                            {{ if (eq .Player 1) }}
+                            {{ if (eq .Play 1) }}
                                 <td class="box x" id="{{ .Box }}"><a href="/{{ .Box }}"> X </a></td>
-                            {{ else if (eq .Player 2) }}
+                            {{ else if (eq .Play 2) }}
                                 <td class="box o" id="{{ .Box }}"><a href="/{{ .Box }}"> O </a></td>
                             {{ else }}
                                 <td class="box" id="{{ .Box }}"><a href="/{{ .Box }}">   </a></td>
@@ -41,9 +41,9 @@
                 <tr class="row 3">
                 {{ range .Board  }}
                     {{ if and (ge .Box 6) (le .Box 8) }}
-                        {{ if (eq .Player 1) }}
+                        {{ if (eq .Play 1) }}
                             <td class="box x" id="{{ .Box }}"><a href="/{{ .Box }}"> X </a></td>
-                        {{ else if (eq .Player 2) }}
+                        {{ else if (eq .Play 2) }}
                             <td class="box o" id="{{ .Box }}"><a href="/{{ .Box }}"> O </a></td>
                         {{ else }}
                             <td class="box" id="{{ .Box }}"><a href="/{{ .Box }}">   </a></td>

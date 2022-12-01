@@ -7,19 +7,21 @@ import (
 	"strconv"
 )
 
-var tmpl *template.Template
-var player = 1
-var data Game
-
-type Move struct {
-	Player int
-	Box    int
+type Board struct {
+	Play int
+	Box  int
 }
 
 type Game struct {
-	Note  string
-	Board [9]Move
+	Player int
+	Note   string
+	Board  [9]Board
 }
+
+var tmpl = template.Must(template.ParseFiles("templates/start.html"))
+
+// reset and display board
+var data Game
 
 func main() {
 	// create empty servemux
@@ -50,25 +52,19 @@ func main() {
 }
 
 func startGame(w http.ResponseWriter, r *http.Request) {
-	// reset player
-	player = 1
-
-	// set template
-	tmpl = template.Must(template.ParseFiles("templates/start.html"))
-
-	// reset and display board
 	data = Game{
-		Note: "Player 1's turn:",
-		Board: [9]Move{
-			{Player: 0, Box: 0},
-			{Player: 0, Box: 1},
-			{Player: 0, Box: 2},
-			{Player: 0, Box: 3},
-			{Player: 0, Box: 4},
-			{Player: 0, Box: 5},
-			{Player: 0, Box: 6},
-			{Player: 0, Box: 7},
-			{Player: 0, Box: 8},
+		Player: 1,
+		Note:   "Player 1's turn:",
+		Board: [9]Board{
+			{Play: 0, Box: 0},
+			{Play: 0, Box: 1},
+			{Play: 0, Box: 2},
+			{Play: 0, Box: 3},
+			{Play: 0, Box: 4},
+			{Play: 0, Box: 5},
+			{Play: 0, Box: 6},
+			{Play: 0, Box: 7},
+			{Play: 0, Box: 8},
 		},
 	}
 
@@ -90,24 +86,24 @@ func nextMove(w http.ResponseWriter, r *http.Request) {
 
 	if valid {
 		// store move on board
-		data.Board[move].Player = player
+		data.Board[move].Play = data.Player
 
 		gameover, full := checkBoard()
 
 		if !gameover {
-			if player == 1 {
-				player = 2
+			if data.Player == 1 {
+				data.Player = 2
 			} else {
-				player = 1
+				data.Player = 1
 			}
-			note = "Player " + strconv.Itoa(player) + "'s Turn:"
+			note = "Player " + strconv.Itoa(data.Player) + "'s Turn:"
 		} else {
 			if full && gameover {
-				note = "GAME OVER! Player " + strconv.Itoa(player) + " Wins!"
+				note = "GAME OVER! Player " + strconv.Itoa(data.Player) + " Wins!"
 			} else if full {
 				note = "Game over... Out of moves!"
 			} else {
-				note = "GAME OVER! Player " + strconv.Itoa(player) + " Wins!"
+				note = "GAME OVER! Player " + strconv.Itoa(data.Player) + " Wins!"
 			}
 		}
 
@@ -117,13 +113,12 @@ func nextMove(w http.ResponseWriter, r *http.Request) {
 		data.Note = "Move already taken, try again: "
 	}
 
-	tmpl := template.Must(template.ParseFiles("./templates/start.html"))
 	tmpl.Execute(w, data)
 }
 
 func validateMove(move int) bool {
 	// check if move is valid
-	if data.Board[move].Player == 0 {
+	if data.Board[move].Play == 0 {
 		return true
 	}
 
@@ -136,7 +131,7 @@ func checkBoard() (bool, bool) {
 	// check if board is full
 	full := true
 	for i := 0; i < 9; i++ {
-		if data.Board[i].Player == 0 {
+		if data.Board[i].Play == 0 {
 			full = false
 		}
 	}
@@ -146,14 +141,14 @@ func checkBoard() (bool, bool) {
 	}
 
 	// check if there is a win (horizontal, vertical , diagonal)
-	if (data.Board[0].Player != 0 && data.Board[0].Player == data.Board[1].Player && data.Board[1].Player == data.Board[2].Player) ||
-		(data.Board[3].Player != 0 && data.Board[3].Player == data.Board[4].Player && data.Board[4].Player == data.Board[5].Player) ||
-		(data.Board[6].Player != 0 && data.Board[6].Player == data.Board[7].Player && data.Board[7].Player == data.Board[8].Player) ||
-		(data.Board[0].Player != 0 && data.Board[0].Player == data.Board[3].Player && data.Board[3].Player == data.Board[6].Player) ||
-		(data.Board[1].Player != 0 && data.Board[1].Player == data.Board[4].Player && data.Board[4].Player == data.Board[7].Player) ||
-		(data.Board[2].Player != 0 && data.Board[2].Player == data.Board[5].Player && data.Board[5].Player == data.Board[8].Player) ||
-		(data.Board[2].Player != 0 && data.Board[2].Player == data.Board[4].Player && data.Board[4].Player == data.Board[6].Player) ||
-		(data.Board[0].Player != 0 && data.Board[0].Player == data.Board[4].Player && data.Board[4].Player == data.Board[8].Player) {
+	if (data.Board[0].Play != 0 && data.Board[0].Play == data.Board[1].Play && data.Board[1].Play == data.Board[2].Play) ||
+		(data.Board[3].Play != 0 && data.Board[3].Play == data.Board[4].Play && data.Board[4].Play == data.Board[5].Play) ||
+		(data.Board[6].Play != 0 && data.Board[6].Play == data.Board[7].Play && data.Board[7].Play == data.Board[8].Play) ||
+		(data.Board[0].Play != 0 && data.Board[0].Play == data.Board[3].Play && data.Board[3].Play == data.Board[6].Play) ||
+		(data.Board[1].Play != 0 && data.Board[1].Play == data.Board[4].Play && data.Board[4].Play == data.Board[7].Play) ||
+		(data.Board[2].Play != 0 && data.Board[2].Play == data.Board[5].Play && data.Board[5].Play == data.Board[8].Play) ||
+		(data.Board[2].Play != 0 && data.Board[2].Play == data.Board[4].Play && data.Board[4].Play == data.Board[6].Play) ||
+		(data.Board[0].Play != 0 && data.Board[0].Play == data.Board[4].Play && data.Board[4].Play == data.Board[8].Play) {
 		gameover = true
 	}
 
