@@ -10,7 +10,21 @@ var board [9]string
 var player = 1
 
 func main() {
-	fmt.Println("Welcome to mel's tic-tac-toe game!")
+	fmt.Println(
+		"Welcome to mel's tic-tac-toe game!",
+		"\n\nHow to play:",
+		"\nSelect a number between 0-8 to select a box",
+	)
+
+	j := 0
+	for i := 0; i < 5; i++ {
+		if i == 1 || i == 3 {
+			fmt.Println("- - - - -")
+		} else {
+			fmt.Println(j, "|", (j + 1), "|", (j + 2))
+			j += 3
+		}
+	}
 
 	// set board
 	for i := 0; i < 9; i++ {
@@ -27,7 +41,7 @@ func nextMove(player int) {
 	// set attempts back to 0
 	attempts = 0
 
-	fmt.Println("----------")
+	fmt.Println("\n----------------")
 	fmt.Println("Player", player, "'s turn:")
 	fmt.Scan(&move)
 
@@ -96,12 +110,12 @@ func addMove(move int) {
 }
 
 func checkBoard() {
-	gameover := false
+	gameover := !(strings.Contains(strings.Join(board[:], ""), " "))
 
 	// check if there is a horizontal win
-	check1 := strings.Join(board[0:4], "")
-	check2 := strings.Join(board[4:7], "")
-	check3 := strings.Join(board[7:9], "")
+	check1 := strings.Join(board[0:3], "")
+	check2 := strings.Join(board[3:6], "")
+	check3 := strings.Join(board[6:9], "")
 
 	if check1 == "XXX" || check1 == "OOO" ||
 		check2 == "XXX" || check2 == "OOO" ||
