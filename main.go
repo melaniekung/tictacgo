@@ -90,20 +90,21 @@ func nextMove(w http.ResponseWriter, r *http.Request) {
 
 		gameover, full := checkBoard()
 
-		if !gameover {
+		if !full && !gameover {
 			if data.Player == 1 {
 				data.Player = 2
 			} else {
 				data.Player = 1
 			}
 			note = "Player " + strconv.Itoa(data.Player) + "'s Turn:"
-		} else {
+		} else if gameover || full {
 			if full && gameover {
 				note = "GAME OVER! Player " + strconv.Itoa(data.Player) + " Wins!"
-			} else if full {
-				note = "Game over... Out of moves!"
-			} else {
+			} else if !full { // not full but gameover
 				note = "GAME OVER! Player " + strconv.Itoa(data.Player) + " Wins!"
+			} else { // full but not gameover
+				note = "Game over... Out of moves!"
+				log.Println("full:", full, "gameover:", gameover)
 			}
 		}
 
@@ -134,10 +135,6 @@ func checkBoard() (bool, bool) {
 		if data.Board[i].Play == 0 {
 			full = false
 		}
-	}
-
-	if full {
-		gameover = true
 	}
 
 	// check if there is a win (horizontal, vertical , diagonal)
