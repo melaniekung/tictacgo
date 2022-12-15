@@ -44,7 +44,7 @@ func main() {
 	}
 
 	// start server
-	log.Println("Tic-Tac-Go on localhost:3000")
+	log.Println("Tic-Tac-Go on http://localhost:3000")
 	err := http.ListenAndServe(":3000", mux)
 	if err != nil {
 		log.Fatal(err)
